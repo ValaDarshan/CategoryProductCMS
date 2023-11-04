@@ -5,45 +5,60 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.Darshan.CategoryProductCMS.CustomException.CategoryNotFoundException;
 import com.Darshan.CategoryProductCMS.CustomException.ProductNotFoundException;
 import com.Darshan.CategoryProductCMS.Dto.ValidateProduct;
+import com.Darshan.CategoryProductCMS.Model.Category;
 import com.Darshan.CategoryProductCMS.Model.Product;
+import com.Darshan.CategoryProductCMS.Repository.CategoryReposite;
 import com.Darshan.CategoryProductCMS.Repository.ProductRepository;
 
 @Service
 public class ProductServiceImpl implements ProductService {
-	
-	
+
 	@Autowired
 	private ProductRepository productRepo;
 
+	@Autowired
+	private CategoryReposite cateRepo;
+
 	@Override
-	public List<Product> getAllProduct( int page) {
+	public List<Product> getAllProduct(int page) {
+
+		final int limit = 10;
+		int offset = (page >= 1) ? (page - 1) * 10 : 0;
 		
-		int limit = 10;
-		int offset = (page >= 1) ? (page-1)*10 : 0; 
+		List<Product> pro = productRepo.findAllWithLimitAndOffset(limit, offset);
 		
+		System.out.println(pro);
+
 		// TODO Auto-generated method stub
-		return productRepo.findAllWithLimitAndOffset(limit , offset);
+		return pro;
 	}
 
 	@Override
 	public Product getProductById(long pid) {
-		
+
 		Product product = productRepo.findById(pid);
-		
-		if(product == null) {
+
+		if (product == null) {
 			throw new ProductNotFoundException("Proudct not found with id:" + pid);
 		}
-		
+
 		return product;
 	}
 
 	@Override
 	public Product addProduct(ValidateProduct product) {
-		// TODO Auto-generated method stub
+
 		
-		Product Newproduct = Product.build(0, product.getName(), product.getDescription(), product.getPrice(), product.getCategory());
+		Category c = cateRepo.findById(product.getCategory_id());
+		
+		if(c == null) {
+			throw new CategoryNotFoundException("Category does not exist");
+		}
+		
+		Product Newproduct = Product.build(0, product.getName(), product.getDescription(), product.getPrice(), c);
 		
 		return productRepo.save(Newproduct);
 	}
@@ -51,22 +66,29 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public Product updateProduct(ValidateProduct product, long pid) {
 		// TODO Auto-generated method stub
-		Product updatedProduct = Product.build(pid, product.getName(), product.getDescription(), product.getPrice(), product.getCategory()); 
 		
+		Category c = cateRepo.findById(product.getCategory_id());
+		
+		if(c == null) {
+			throw new CategoryNotFoundException("Category does not exist");
+		}
+		Product updatedProduct = Product.build(pid, product.getName(), product.getDescription(), product.getPrice(),
+				c);
+
 		return productRepo.save(updatedProduct);
 	}
 
 	@Override
 	public String removeProduct(long pid) {
 		// TODO Auto-generated method stub
-		
+
 		Product product = productRepo.findById(pid);
-		if(product == null) {
+		if (product == null) {
 			throw new ProductNotFoundException("Proudct not found with id:" + pid);
 		}
-		
+
 		productRepo.deleteById(pid);
-		return "Product with id: "+pid+" is removed.";
+		return "Product with id: " + pid + " is removed.";
 	}
 
 }

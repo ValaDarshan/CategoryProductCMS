@@ -1,7 +1,5 @@
 package com.Darshan.CategoryProductCMS.Dto;
 
-import com.Darshan.CategoryProductCMS.Model.Category;
-
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -21,7 +19,9 @@ public class ValidateProduct {
 	
 	@Min(value = 1 , message = "Product price should be greater than 1")
 	private long price;
-	private Category category;
+	private long category_id;
+	
+	
 	
 
 }

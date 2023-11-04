@@ -11,6 +11,6 @@ public interface ProductRepository extends JpaRepository<Product, Long>{
 
 	public Product findById(long id);
 	
-	 @Query(value = "SELECT * FROM Product LIMIT ?1 OFFSET ?2", nativeQuery = true)
+	 @Query(value = "SELECT pid,name,description, price ,category_id  FROM Product LIMIT ?1 OFFSET ?2", nativeQuery = true)
 	  List<Product> findAllWithLimitAndOffset(int limit, int offset);
 }

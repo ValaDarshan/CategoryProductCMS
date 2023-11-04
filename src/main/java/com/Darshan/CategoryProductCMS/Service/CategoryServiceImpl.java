@@ -3,8 +3,6 @@ package com.Darshan.CategoryProductCMS.Service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.Darshan.CategoryProductCMS.CustomException.CategoryNotFoundException;
@@ -38,14 +36,13 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	public Category addCategory(ValidateCategory category) {
-		Category NewCategory = Category.build(0, category.getName(), category.getDescription());
-
+		Category NewCategory = Category.build(0, category.getName(), category.getDescription(), category.getProducts());
 		return cateRepo.save(NewCategory);
 	}
 
 	@Override
 	public Category updateCategory(ValidateCategory category, long cid) {
-		Category getCategory = Category.build(cid, category.getName(), category.getDescription());
+		Category getCategory = Category.build(cid, category.getName(), category.getDescription(), category.getProducts());
 		return cateRepo.save(getCategory);
 	}
 
@@ -56,7 +53,6 @@ public class CategoryServiceImpl implements CategoryService {
 		if (category == null) {
 			throw new CategoryNotFoundException("Category with id "+ cid +" not found!!");
 		}
-		
 		cateRepo.deleteById(cid);
 
 		return "Category having id: " + cid + "removed !!..";
