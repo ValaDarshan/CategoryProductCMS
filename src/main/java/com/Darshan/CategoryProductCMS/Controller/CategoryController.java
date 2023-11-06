@@ -27,8 +27,8 @@ public class CategoryController {
 		private CategoryService service;
 	
 		@GetMapping("")
-		public List<Category> getAllCategory(@RequestParam(name = "page") int page) {
-			return service.getAllCategory(page);
+		public List<Category> getAllCategory(@RequestParam(name = "page" , defaultValue = "0" , required = false) int page , @RequestParam(name = "pageSize" , defaultValue = "10" , required = false) int pageSize) {
+			return service.getAllCategory(page , pageSize);
 		}
 		
 		@GetMapping("/{cid}")

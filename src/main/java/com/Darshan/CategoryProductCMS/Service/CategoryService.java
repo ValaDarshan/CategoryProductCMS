@@ -7,7 +7,7 @@ import com.Darshan.CategoryProductCMS.Model.Category;
 
 public interface CategoryService {
 	
-	public List<Category> getAllCategory(int page) ;
+	public List<Category> getAllCategory(int page , int pageSize) ;
 	
 	public Category getCategoryById(long cid);
 	

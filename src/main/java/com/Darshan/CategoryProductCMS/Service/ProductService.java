@@ -7,7 +7,7 @@ import com.Darshan.CategoryProductCMS.Model.Product;
 
 public interface ProductService {
 
-	public List<Product> getAllProduct(int page);
+	public List<Product> getAllProduct(int page , int pageSize);
 	
 	public Product getProductById(long pid) ;
 	

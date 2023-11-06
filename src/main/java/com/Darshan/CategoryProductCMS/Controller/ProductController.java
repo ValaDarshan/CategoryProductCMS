@@ -27,8 +27,8 @@ public class ProductController {
 	private ProductService service;
 	
 	@GetMapping("")
-	public List<Product> getAllProduct(@RequestParam(name = "page") int page){
-		return service.getAllProduct(page);
+	public List<Product> getAllProduct(@RequestParam(name = "page", defaultValue = "0" , required = false) int page , @RequestParam(name = "pageSize" , defaultValue = "10" , required = false) int pageSize){
+		return service.getAllProduct(page , pageSize);
 	}
 	
 	@GetMapping("/{pid}")

@@ -3,6 +3,9 @@ package com.Darshan.CategoryProductCMS.Service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.Darshan.CategoryProductCMS.CustomException.CategoryNotFoundException;
@@ -23,16 +26,12 @@ public class ProductServiceImpl implements ProductService {
 	private CategoryReposite cateRepo;
 
 	@Override
-	public List<Product> getAllProduct(int page) {
-
-		final int limit = 10;
-		int offset = (page >= 1) ? (page - 1) * 10 : 0;
+	public List<Product> getAllProduct(int page , int pageSize) {
 		
-		List<Product> pro = productRepo.findAllWithLimitAndOffset(limit, offset);
+		Pageable p = PageRequest.of(page, pageSize);
+		Page<Product> getProducts= productRepo.findAll(p);
+		List<Product> pro = getProducts.getContent();
 		
-		System.out.println(pro);
-
-		// TODO Auto-generated method stub
 		return pro;
 	}
 
